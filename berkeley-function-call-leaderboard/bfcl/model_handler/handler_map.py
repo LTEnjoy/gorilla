@@ -41,6 +41,7 @@ from bfcl.model_handler.local_inference.qwen_fc import QwenFCHandler
 from bfcl.model_handler.local_inference.salesforce_llama import SalesforceLlamaHandler
 from bfcl.model_handler.local_inference.salesforce_qwen import SalesforceQwenHandler
 from bfcl.model_handler.api_inference.mining import MiningHandler
+from bfcl.model_handler.api_inference.qwen import QwenHandler as APIQwenHandler
 
 # TODO: Add meta-llama/Llama-3.1-405B-Instruct
 
@@ -107,6 +108,7 @@ api_inference_handler_map = {
     "grok-3-mini-beta-FC": GrokHandler,
     "grok-3-mini-beta": GrokHandler,
     "xiaoming-14B": MiningHandler,
+    "qwen-turbo": APIQwenHandler,
 }
 
 # Inference through local hosting

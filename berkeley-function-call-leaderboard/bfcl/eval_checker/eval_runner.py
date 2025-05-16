@@ -369,7 +369,6 @@ def runner(model_names, test_categories, result_dir, score_dir):
         model_name_escaped = model_name.replace("_", "/")
 
         print(f"🦍 Model: {model_name}")
-
         # Find and process all JSON files in the subdirectory
         for model_result_json in subdir.glob("*.json"):
             test_category = extract_test_category(model_result_json)
@@ -399,9 +398,9 @@ def runner(model_names, test_categories, result_dir, score_dir):
     # evaluation for a subset of models and test categories.
     update_leaderboard_table_with_local_score_file(state["leaderboard_table"], score_dir)
     # Write the leaderboard table to a file
-    generate_leaderboard_csv(
-        state["leaderboard_table"], score_dir, model_names, test_categories
-    )
+    # generate_leaderboard_csv(
+    #     state["leaderboard_table"], score_dir, model_names, test_categories
+    # )
 
 
 def evaluate_task(
@@ -483,7 +482,7 @@ def main(model, test_categories, result_dir, score_dir):
         test_categories = [test_categories]
 
     _, all_test_categories = parse_test_category_argument(test_categories)
-
+    
     model_names = None
     if model:
         model_names = []
