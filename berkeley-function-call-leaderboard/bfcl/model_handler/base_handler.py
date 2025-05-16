@@ -623,7 +623,7 @@ class BaseHandler:
         )
 
         api_response, query_latency = self._query_prompting(inference_data)
-
+        
         # Try parsing the model response
         model_response_data = self._parse_query_response_prompting(api_response)
 

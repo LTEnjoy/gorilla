@@ -16,12 +16,12 @@ from bfcl.constants.eval_config import (
     TEST_IDS_TO_GENERATE_PATH,
 )
 from bfcl.eval_checker.eval_runner_helper import load_file
-from bfcl.constants.model_config import MODEL_CONFIG_MAPPING
+from bfcl.model_handler.handler_map import HANDLER_MAP
 from bfcl.model_handler.model_style import ModelStyle
 from bfcl.utils import is_multi_turn, parse_test_category_argument, sort_key
 from tqdm import tqdm
 
-RETRY_LIMIT = 3
+RETRY_LIMIT = 0
 # 60s for the timer to complete. But often we find that even with 60 there is a conflict. So 65 is a safe no.
 RETRY_DELAY = 65  # Delay in seconds
 
@@ -64,7 +64,7 @@ def get_args():
 
 
 def build_handler(model_name, temperature):
-    handler = MODEL_CONFIG_MAPPING[model_name].model_handler(model_name, temperature)
+    handler = HANDLER_MAP[model_name](model_name, temperature)
     return handler
 
 
@@ -172,7 +172,7 @@ def multi_threaded_inference(handler, test_case, include_input_log, exclude_stat
     assert type(test_case["function"]) is list
 
     retry_count = 0
-
+    
     while True:
         try:
             result, metadata = handler.inference(
@@ -275,14 +275,7 @@ def main(args):
         all_test_categories,
         all_test_entries_involved,
     ) = get_involved_test_entries(args.test_category, args.run_ids)
-
-    for model_name in args.model:
-        if model_name not in MODEL_CONFIG_MAPPING:
-            raise ValueError(
-                        f"Unknown model_name '{model_name}'.\n"
-                        "• For officially supported models, please refer to `SUPPORTED_MODELS.md`.\n"
-                        "• For running new models, please refer to `README.md` and `CONTRIBUTING.md`."
-                    )
+    
     print(f"Generating results for {args.model}")
     if args.run_ids:
         print("Running specific test cases. Ignoring `--test-category` argument.")
@@ -293,7 +286,7 @@ def main(args):
         args.result_dir = PROJECT_ROOT / args.result_dir
     else:
         args.result_dir = RESULT_PATH
-
+        
     for model_name in args.model:
         test_cases_total = collect_test_cases(
             args,
@@ -302,7 +295,7 @@ def main(args):
             all_test_file_paths,
             all_test_entries_involved,
         )
-
+        
         if len(test_cases_total) == 0:
             print(
                 f"All selected test cases have been previously generated for {model_name}. No new test cases to generate."
