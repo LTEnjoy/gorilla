@@ -621,7 +621,7 @@ class BaseHandler:
         inference_data = self.add_first_turn_message_prompting(
             inference_data, test_entry["question"][0]
         )
-
+        
         api_response, query_latency = self._query_prompting(inference_data)
         
         # Try parsing the model response
