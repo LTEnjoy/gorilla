@@ -338,7 +338,10 @@ class OSSHandler(BaseHandler, EnforceOverrides):
             extra_body["stop_token_ids"] = self.stop_token_ids
         if hasattr(self, "skip_special_tokens"):
             extra_body["skip_special_tokens"] = self.skip_special_tokens
-
+        
+        # print(self.model_path_or_id)
+        # raise
+        
         start_time = time.time()
         if len(extra_body) > 0:
             api_response = self.client.completions.create(
